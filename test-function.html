@@ -12,19 +12,31 @@
   <script>
     let app = document.querySelector('#app');
     let print = console.log;
+    // const str = `
+    //     {@ if( data.con > 20 ) { @}
+    //         <p>ifififififif</p>
+    //     {@ } else { @}
+    //         <p>elseelseelseelse</p>
+    //     {@ } @}
+    //     <!--{{i}}-->
+    //     {@ for(var i = 0; i < data.list.length; i++) { @}
+    //       <p>{{i }} : {{ data.list[i] }}</p>
+    //     {@ } @}
+    // `
     const str = `
-        {@ if( data.con > 20 ) { @}
-            <p>ifififififif</p>
-        {@ } else { @}
-            <p>elseelseelseelse</p>
-        {@ } @}
-        <!--{{i}}-->
-        {@ for(var i = 0; i < data.list.length; i++) { @}
-          <p>{{i }} : {{ data.list[i] }}</p>
-        {@ } @}
-    `
+    {@ if data.con > 20 @}
+        <p>ifififififif</p>
+    {@ elif data.con === 20 @}
+        <p>elseelseelseelseifififififif</p>
+    {@ else @}
+        <p>elseelseelseelse</p>
+    {/@ if @}
+    {@ each data.list as item @}
+        <p>循环 {{ index + 1 }} 次: {{ item }}</p>
+    {/@ each @}
+    `;
     const data = {con:21, list: [1,2,3,4,5,76,87,8]}
-    let result = tpl().compile(str, data);
+    let result = tpl({syntax: true}).compile(str, data);
     app.innerHTML = result;
   </script>
 </body>
