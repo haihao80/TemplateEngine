@@ -24,7 +24,7 @@
         {@ } @}
     `
     const data = {con:21, list: [1,2,3,4,5,76,87,8]}
-    let result = tpl(str, data);
+    let result = tpl().compile(str, data);
     app.innerHTML = result;
   </script>
 </body>
