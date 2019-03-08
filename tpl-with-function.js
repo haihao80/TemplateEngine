@@ -29,10 +29,17 @@ class Tpl {
     const tplStr = str.replace(/\n/g, '')
     //注释
      .replace(this.config.signs.noCommentSign, '')
-     .replace(this.config.signs.commentSign, (match, p) => `'+'<!--${p}-->'+'`)
+     .replace(this.config.signs.commentSign, (match, p) => {
+        const exp = p.replace(/[\{\}\<\>]/g, match => `&*&${match.charCodeAt()}&*&`)
+        return `'+'<!--${exp}-->'+'`
+     })
      .replace(this.config.signs.varSign, (match, p) => `' + ${p} + '`)
      .replace(this.config.signs.evalSign, (match, p) => {
        return ` '; ${p} tpl += '`
+      })
+      .replace(/\&\*\&(.+?)\&\*\&/g, (match, p) => {
+        console.log(p,String.fromCharCode(p))
+        String.fromCharCode(p);
       });
       console.log(tplStr)
     return new Function('data', `let tpl=' ${tplStr}'; return tpl;`)(data);
