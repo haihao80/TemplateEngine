@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./tpl-with-function.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">tt</div>
+  <script>
+    let app = document.querySelector('#app');
+    let print = console.log;
+    const str = `
+        {@ if( data.con > 20 ) { @}
+            <p>ifififififif</p>
+        {@ } else { @}
+            <p>elseelseelseelse</p>
+        {@ } @}
+
+        {@ for(var i = 0; i < data.list.length; i++) { @}
+          <p>{{i }} : {{ data.list[i] }}</p>
+        {@ } @}
+    `
+    const data = {con:21, list: [1,2,3,4,5,76,87,8]}
+    let result = tpl(str, data);
+    app.innerHTML = result;
+  </script>
+</body>
+</html>
