@@ -33,6 +33,7 @@
     {/@ if @}
     {@ each data.list as item @}
         <p>循环 {{ index + 1 }} 次: {{ item }}</p>
+        <p> {{ 'test' | upper | reverse }} </p>
     {/@ each @}
     `;
     const data = {con:21, list: [1,2,3,4,5,76,87,8]}

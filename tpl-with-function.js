@@ -39,7 +39,8 @@ class Tpl {
       exp = '} else {'
     }
     else if(arr[0] == 'each') {
-      exp = `for(let index=0, len=${arr[1].length}; index<len; index++) {
+      console.log(arr[1])
+      exp = `for(let index=0, len=${arr[1]}.length; index<len; index++) {
         let item = ${arr[1]}[index];
         `
     }
@@ -57,7 +58,23 @@ class Tpl {
         return `'+'<!--${exp}-->'+'`
      })
      //variable
-     .replace(this.config.signs.varSign, (match, p) => `' + (${p}) + '`)
+     .replace(this.config.signs.varSign, (match, p) => {
+        let exp = p;
+        let filterIndex = p.indexOf('|')
+        if(filterIndex > 0) {
+          const 
+            arr = exp.split('|').map(val => val.trim()),
+            filters = arr.slice(1),
+            oldVal = arr[0];
+          exp = filters.reduce((curVal, curFilter) => {
+            if(!Filters[curFilter]) {
+              throw new Error('No Such Filter');
+            }
+            return `${Filters[curFilter](curVal)}`;
+          }, oldVal)
+        }
+        return `' + (${exp}) + '`;
+     })
      //syntax
      .replace(this.config.signs.evalSign, (match, p) => {
        let exp = p.replace('&lt;', '<').replace('&gt;', '>');
@@ -80,6 +97,16 @@ class Tpl {
   compile(str, data) {
     return this._compile(str, data);
   }
+}
+
+const Filters = {
+  upper: str => str.toUpperCase(),
+  lower: str => str.toLowerCase(),
+  reverse: str => str.split('').reverse().join(''),
+  escape: str => str.replace(/&(?!\w+;)/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 function tpl(config) {
